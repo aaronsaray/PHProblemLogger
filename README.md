@@ -156,6 +156,23 @@ class MyUserErrorFilter
 $handler->application(new MyUserErrorFilter($yourAuthenticationProviderInstance));
 ```
 
+**Add additional useful information like memory usage**
+
+```php
+$handler->application(function(array $payload) {
+  $payload['memory_usage'] = memory_get_usage();
+  $payload['pid'] = getmypid();
+  $payload['resource_usage'] = getrusage(); 
+  return $payload;
+});
+```
+
+### Troubleshooting
+
+**Session variables are not being logged.**  
+Make sure that you are calling `session_start()` somewhere before the error happens.  This library will not attempt to start a session 
+just to report on the content of it.
+
 ## About
 
 There are a lot of systems out there to handle the display of errors - and some more complex solutions (like Zend Server) to
