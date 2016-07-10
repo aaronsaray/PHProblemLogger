@@ -36,7 +36,7 @@ $problemHandler
     ->server(function(array $payload) {
         return $payload;
     })
-    ->cookie('HandlerFilter::all');
+    ->cookie(HandlerFilter::all());
 ```
 
 To create the new instance of the problem handler, create a new instance of the class and pass in a LoggerInterface class as the first
@@ -46,8 +46,8 @@ in your application.  Then, for each portion of the runtime environment that we 
 First, in order to get all $_SERVER variables, we call ->server() with a closure that takes a payload of what is the $_SERVER
 variable and allows us to edit it.  In this case, we just return the entire array.
 
-Next, when filtering the $_COOKIE super global, we call the built-in filter function, the `all()` function of the HandlerFilter.  
-This is essentially the same as the closure we wrote.  It's just used to save time.
+Next, when filtering the $_COOKIE super global, we call the helper function `all()` of the HandlerFilter.  
+This is essentially returns a function that is the same as the closure we wrote.  It's just used to save time.
 
 Now, any exception or error will write to the logger with the entire contents of the $_SERVER and the $_COOKIE variables.  
 Remember, since we didn't add any other filters, items like $_GET and $_POST will not be logged.
@@ -75,11 +75,11 @@ or database connection variables in your $_ENV.
 
 ### Built-in Filter Callables
 
-To save time, there are two built-in filter callables.
+To save time, there are two helper methods that return filter callables.
 
-`HandlerFilter::all` - returns the entire payload unaltered
+`HandlerFilter::all` - returns a filter that returns the entire payload unaltered
 
-`HandlerFilter::none` - returns null, making sure that the variable is not logged
+`HandlerFilter::none` - returns a filter that returns null, making sure that the variable is not logged
 
 ### Cookbooks
 

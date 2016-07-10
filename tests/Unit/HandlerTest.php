@@ -8,6 +8,7 @@
 namespace AaronSaray\PHProblemLogger\Tests\Unit;
 
 use AaronSaray\PHProblemLogger\Handler;
+use AaronSaray\PHProblemLogger\HandlerFilter;
 
 /**
  * Class HandlerTest
@@ -88,6 +89,15 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         $_SERVER = ['test-item-server'];
         $this->assertInstanceOf('AaronSaray\PHProblemLogger\Handler', $handler->server($this->getDumbCallable()));
         $assumedValue = array_merge($this->defaultValuesArray, ['server' => ['test-item-server']]);
+        $this->assertAttributeEquals($assumedValue, 'values', $handler);
+    }
+    
+    public function testBuiltInFilterUsage()
+    {
+        $handler = new Handler();
+        $_SERVER = ['something'];
+        $handler->server(HandlerFilter::all());
+        $assumedValue = array_merge($this->defaultValuesArray, ['server' => ['something']]);
         $this->assertAttributeEquals($assumedValue, 'values', $handler);
     }
 }

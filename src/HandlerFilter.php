@@ -14,24 +14,26 @@ namespace AaronSaray\PHProblemLogger;
 class HandlerFilter
 {
     /**
-     * Return payload 
+     * Get a filter for all
      * 
-     * @param array $payload
-     * @return array
+     * @return \Closure
      */
-    public static function all(array $payload)
+    public static function all()
     {
-        return $payload;
+        return function(array $payload) {
+            return $payload;
+        };
     }
 
     /**
-     * Get no payload
+     * Get a filter for none
      * 
-     * @param array $payload
-     * @return null
+     * @return \Closure
      */
-    public static function none(array $payload)
+    public static function none()
     {
-        return null;
+        return function(array $payload) {
+            return null;
+        };
     }
 }
