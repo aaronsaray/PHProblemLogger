@@ -22,7 +22,8 @@ class Handler
         'post'          =>  null,
         'cookie'        =>  null,
         'environment'   =>  null,
-        'server'        =>  null
+        'server'        =>  null,
+        'application'   =>  null
     ];
 
     /**
@@ -94,6 +95,18 @@ class Handler
     public function server(callable $callable)
     {
         $this->values['server'] = $callable($_SERVER);
+        return $this;
+    }
+
+    /**
+     * Custom application values
+     * 
+     * @param callable $callable
+     * @return $this
+     */
+    public function application(callable $callable)
+    {
+        $this->values['application'] = $callable([]);
         return $this;
     }
 }

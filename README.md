@@ -73,6 +73,8 @@ or database connection variables in your $_ENV.
 
 `Handler::server` - access to $_SERVER
 
+`Handler::application` - empty array to add custom application values to
+
 ### Built-in Filter Callables
 
 To save time, there are two helper methods that return filter callables.
@@ -82,6 +84,76 @@ To save time, there are two helper methods that return filter callables.
 `HandlerFilter::none` - returns a filter that returns null, making sure that the variable is not logged
 
 ### Cookbooks
+
+For the following cookbooks, we're assuming that the `$handler` variable is an instance of this library with a valid
+logger injected.
+
+**Log $_SERVER only if running from web server**
+
+```php
+$handler->server(function(array $payload) {
+  return php_sapi_name() != 'cli' ? $payload : null;
+});
+```
+
+**Mask a credit card number in $_POST by the key 'cc_number'** 
+
+```php
+$handler->post(function(array $payload) {
+  if (array_key_exists('cc_number', $payload)) {
+    $payload['cc_number'] = str_pad(substr($payload['cc_number'], -4), strlen($payload['cc_number']), '*', STR_PAD_LEFT);
+  }
+  return $payload;
+});
+```
+
+**Conditionally do not log $_SESSION based on an application choice**
+
+```php
+use AaronSaray\PHProblemLogger\Handler as HandlerFilter;
+
+$handler->session(HandlerFilter::all());
+
+if (someFunctionIsTrue()) {
+  $handler->session(HandlerFilter::none());
+}
+```
+
+**Log user information from your session without a complex application / DI solution**
+
+```php
+$handler->application(function(array $payload) {
+  if (isset($_SESSION['user'])) {
+    $payload['user'] = $_SESSION['user'];
+  }
+  return $payload;
+});
+```
+
+**Log detailed user information within an application with Dependency Injection**
+
+```php
+
+class MyUserErrorFilter
+{
+  protected $authenticationProvider;
+  
+  public function __construct($authenticationProvider)
+  { 
+    $this->authenticationProvider = $authenticationProvider;
+  }
+  
+  public function __invoke(array $payload)
+  {
+    if ($this->authenticationProvider->isLoggedIn()) {
+       $payload['authenticationInfo'] = $this->authenticationProvider->getAuthenticationInfo();
+    }
+    return $payload;
+  }
+}
+
+$handler->application(new MyUserErrorFilter($yourAuthenticationProviderInstance));
+```
 
 ## About
 

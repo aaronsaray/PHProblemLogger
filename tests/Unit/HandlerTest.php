@@ -25,7 +25,8 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         'post'          =>  null,
         'cookie'        =>  null,
         'environment'   =>  null,
-        'server'        =>  null
+        'server'        =>  null,
+        'application'   =>  null
     ];
 
     /**
@@ -37,6 +38,11 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
             return $payload;
         };
     }
+    
+//    public function setUp()
+//    {
+//        $_SERVER = $_COOKIE = $_SESSION = $_POST = $_GET = $_ENV = null;
+//    }
     
     public function testSessionFilter()
     {
@@ -89,6 +95,18 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         $_SERVER = ['test-item-server'];
         $this->assertInstanceOf('AaronSaray\PHProblemLogger\Handler', $handler->server($this->getDumbCallable()));
         $assumedValue = array_merge($this->defaultValuesArray, ['server' => ['test-item-server']]);
+        $this->assertAttributeEquals($assumedValue, 'values', $handler);
+    }
+
+    public function testApplicationFilter()
+    {
+        $handler = new Handler();
+        $callable = function(array $payload) {
+            $payload['custom-value'] = 2;
+            return $payload;
+        };
+        $this->assertInstanceOf('AaronSaray\PHProblemLogger\Handler', $handler->application($callable));
+        $assumedValue = array_merge($this->defaultValuesArray, ['application' => ['custom-value' => 2]]);
         $this->assertAttributeEquals($assumedValue, 'values', $handler);
     }
     
