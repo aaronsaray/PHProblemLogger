@@ -98,18 +98,18 @@ $handler->server(function(array $payload) {
 });
 ```
 
-**Mask a credit card number in $_POST by the key 'cc_number'** 
+**Mask a credit card number in `$_POST` by the key 'cc_num'** 
 
 ```php
 $handler->post(function(array $payload) {
-  if (array_key_exists('cc_number', $payload)) {
-    $payload['cc_number'] = str_pad(substr($payload['cc_number'], -4), strlen($payload['cc_number']), '*', STR_PAD_LEFT);
+  if (array_key_exists('cc_num', $payload)) {
+    $payload['cc_num'] = str_pad(substr($payload['cc_num'], -4), strlen($payload['cc_num']), '*', STR_PAD_LEFT);
   }
   return $payload;
 });
 ```
 
-**Conditionally do not log $_SESSION based on an application choice**
+**Conditionally do not log `$_SESSION` based on an application choice**
 
 ```php
 use AaronSaray\PHProblemLogger\Handler as HandlerFilter;
@@ -135,7 +135,6 @@ $handler->application(function(array $payload) {
 **Log detailed user information within an application with Dependency Injection**
 
 ```php
-
 class MyUserErrorFilter
 {
   protected $authenticationProvider;
