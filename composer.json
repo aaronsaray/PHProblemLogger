@@ -1,0 +1,22 @@
+{
+  "name": "AaronSaray/PHProblemLogger",
+  "description": "PHP Problem Logger",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Aaron Saray",
+      "email": "aaron@aaronsaray.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "AaronSaray\\PHProblemLogger\\": "src"
+    }
+  },
+  "require": {
+    "php":  ">=5.4.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^4.8"
+  }
+}
