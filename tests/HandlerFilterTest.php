@@ -5,7 +5,7 @@
  * @author Aaron Saray
  */
 
-namespace AaronSaray\PHProblemLogger\Tests\Unit;
+namespace AaronSaray\PHProblemLogger\Tests;
 
 use AaronSaray\PHProblemLogger\HandlerFilter;
 

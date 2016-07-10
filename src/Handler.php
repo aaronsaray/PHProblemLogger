@@ -6,6 +6,7 @@
  */
 
 namespace AaronSaray\PHProblemLogger;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Handler
@@ -25,6 +26,26 @@ class Handler
         'server'        =>  null,
         'application'   =>  null
     ];
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * @var Callable|Null
+     */
+    protected $previousExceptionHandler;
+
+    /**
+     * Handler constructor.
+     * @param LoggerInterface $logger
+     */
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+        $this->registerExceptionHandler();
+    }
 
     /**
      * Session Values
@@ -108,5 +129,34 @@ class Handler
     {
         $this->values['application'] = $callable([]);
         return $this;
+    }
+
+    /**
+     * Register the exception handler
+     */
+    protected function registerExceptionHandler()
+    {
+        $this->previousExceptionHandler = set_exception_handler(array($this, 'handleException'));
+    }
+
+    /**
+     * Exception Handler
+     * 
+     * This filters our log items, logs our exception, and then if there was a previous exception handler, does that one
+     *
+     * @note PHP7 breaks \Exception as Exception type - and goes with \Throwable because of the Error object
+     * @param $exception \Exception|\Throwable
+     */
+    public function handleException($exception)
+    {
+        $logItems = array_filter($this->values, function($values) {
+            return !is_null($values);
+        });
+        $this->logger->error($exception, $logItems);
+
+        if (is_callable($this->previousExceptionHandler)) {
+            $callable = $this->previousExceptionHandler;
+            $callable($exception);
+        }
     }
 }

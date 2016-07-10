@@ -21,7 +21,11 @@ This library will add on to the existing exception and error handler using a PSR
 for output of the current environment.  The configuration of this logger is *additive* meaning that out of the box nothing
 is logged during a problem.  You must configure filters to indicate what you'd like to be logged.
 
-To use this tool, have an instance of a PSR-3 logger available and at least one filter callable ready.
+To use this tool, have an instance of a PSR-3 logger available and at least one filter callable ready.  
+
+**Important** If you have your own exception handling in place (like a redirect or a nice view), create a new instance of
+PHProblemLogger **after** you've defined your exception handler.  PHProblemLogger keeps a reference to the previous 
+exception handler and will call it after it does exception logging.
 
 ### An Example
 
@@ -172,6 +176,18 @@ $handler->application(function(array $payload) {
 **Session variables are not being logged.**  
 Make sure that you are calling `session_start()` somewhere before the error happens.  This library will not attempt to start a session 
 just to report on the content of it.
+
+**My own custom exception handler is not firing**  
+Make sure that you've made a new instance of `Handler` **after** you've defined your custom exception handler.  If you're using
+any other sort of exception handler queueing system, this may not work.
+
+**I am not seeing any of the logs from PHProblemLogger in the output**  
+This could be happening for a number of reasons.  First, note that the log level of `ERROR` is being used to log the 
+exceptions and errors.  Verify that your log writer is configured to write that log level.  Second, you may want to verify 
+that PHProblemHandler's exception handler hasn't been removed.  When you call `set_exception_handler` it returns the previous
+exception handler.  Use a debugger to validate that the exception handler is still set.  A quick and dirty solution is to use 
+the following code to verify this: `var_dump(set_exception_handler(function(){}));` - which should return a callable that
+reflects the PHProblemHandler function of `Handler::handleException`.
 
 ## About
 
