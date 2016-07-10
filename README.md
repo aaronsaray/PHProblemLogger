@@ -100,6 +100,8 @@ something like this to my application.  I then created it as an open source proj
 
 Bugs and feature request are tracked on [GitHub](https://github.com/aaronsaray/phproblemlogger/issues)
 
+Run tests by executing `composer tests` in the root of the project.
+
 ### Author
 
 Aaron Saray - <http://aaronsaray.com>
