@@ -1,7 +1,9 @@
 {
   "name": "AaronSaray/PHProblemLogger",
   "description": "PHP Problem Logger",
+  "homepage": "https://github.com/aaronsaray/PHProblemLogger",
   "license": "MIT",
+  "type": "library",
   "authors": [
     {
       "name": "Aaron Saray",
@@ -23,7 +25,8 @@
     "psr/log": "^1.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "^4.8"
+    "phpunit/phpunit": "^4.8",
+    "satooshi/php-coveralls": "^1.0"
   },
   "scripts": {
     "tests": "phpunit --coverage-text"

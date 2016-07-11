@@ -1,7 +1,5 @@
 # PHProblemLogger
 
-**Currently in Development**
-
 This tool helps create a better log of the current environment when a problem happens in PHP - like an Exception or an Error.
 Exceptions are handled by an exception handler - and errors are converted into a custom ErrorException and thrown.
 
