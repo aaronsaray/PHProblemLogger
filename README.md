@@ -3,6 +3,7 @@
 **Currently in Development**
 
 This tool helps create a better log of the current environment when a problem happens in PHP - like an Exception or an Error.
+Exceptions are handled by an exception handler - and errors are converted into a custom ErrorException and thrown.
 
 ## Installation Instructions
 
@@ -21,11 +22,14 @@ This library will add on to the existing uncaught exception and error handler us
 for output of the current environment.  The configuration of this logger is *additive* meaning that out of the box nothing
 is logged during a problem.  You must configure filters to indicate what you'd like to be logged.
 
+All uncaught exceptions are processed using this library.  Error types of E_ALL | E_STRICT are turned into a custom Exception and processed.
+
 To use this tool, have an instance of a PSR-3 logger available and at least one filter callable ready.  
 
 **Important** If you have your own exception handling in place (like a redirect or a nice view), create a new instance of
-PHProblemLogger **after** you've defined your exception handler.  PHProblemLogger keeps a reference to the previous 
-exception handler and will call it after it does exception logging.
+PHProblemLogger **after** you've defined your handler.  PHProblemLogger keeps a reference to the previous handler and 
+will call it after it after processing finishes.  This does **not** apply to the error handler.  This is overwritten and 
+errors are converted into an `ErrorException`.
 
 ### An Example
 

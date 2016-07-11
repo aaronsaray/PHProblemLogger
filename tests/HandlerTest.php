@@ -180,4 +180,26 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         }
         $this->assertTrue($tracker->called);
     }
+
+    public function testErrorHandlerWasSet()
+    {
+        new Handler(new NullLogger());
+        $currentErrorHandler = set_error_handler(function(){});
+        $this->assertTrue(is_array($currentErrorHandler));
+        $this->assertInstanceOf('AaronSaray\PHProblemLogger\Handler', $currentErrorHandler[0]);
+        $this->assertEquals('handleError', $currentErrorHandler[1]);
+    }
+    
+    public function testErrorConvertedToException()
+    {
+        $handler = new Handler(new NullLogger());
+        try {
+            trigger_error('my test error', E_USER_NOTICE);
+            $this->fail('Exception not triggered.');
+        }
+        catch (\Exception $e) {
+            $this->assertInstanceOf('AaronSaray\PHProblemLogger\ErrorException', $e);
+            $this->assertEquals('my test error', $e->getMessage());
+        }
+    }
 }

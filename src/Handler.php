@@ -45,6 +45,7 @@ class Handler
     {
         $this->logger = $logger;
         $this->registerExceptionHandler();
+        $this->registerErrorHandler();
     }
 
     /**
@@ -158,5 +159,31 @@ class Handler
             $callable = $this->previousExceptionHandler;
             $callable($exception);
         }
+    }
+
+    /**
+     * Register the error handler
+     */
+    protected function registerErrorHandler()
+    {
+        set_error_handler(array($this, 'handleError'));
+    }
+
+    /**
+     * Handles the error into an exception
+     * 
+     * @param $errorNumber integer
+     * @param $errorString string
+     * @param $errorFile string
+     * @param $errorLine integer
+     * @param $errorContext array
+     * @throws ErrorException
+     */
+    public function handleError($errorNumber, $errorString, $errorFile, $errorLine, $errorContext)
+    {
+        $errorException = new ErrorException($errorString, $errorNumber);
+        $errorException->setFile($errorFile);
+        $errorException->setLine($errorLine);
+        throw $errorException;
     }
 }
