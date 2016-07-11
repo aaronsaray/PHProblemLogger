@@ -208,6 +208,11 @@ exception handler.  Use a debugger to validate that the exception handler is sti
 the following code to verify this: `var_dump(set_exception_handler(function(){}));` - which should return a callable that
 reflects the PHProblemHandler function of `Handler::handleException`.
 
+## Todo
+
+- TravisCI for 7.x and HHVM  
+Currently, this is failing because of the independent process tests and not finding a code coverage file and/or a PharException.
+
 ## About
 
 There are a lot of systems out there to handle the display of errors - and some more complex solutions (like Zend Server) to
