@@ -17,7 +17,7 @@ $ composer require aaronsaray/phproblemlogger
 
 ### Getting Started
 
-This library will add on to the existing exception and error handler using a PSR-3 compatible logging instance
+This library will add on to the existing uncaught exception and error handler using a PSR-3 compatible logging instance
 for output of the current environment.  The configuration of this logger is *additive* meaning that out of the box nothing
 is logged during a problem.  You must configure filters to indicate what you'd like to be logged.
 
@@ -169,6 +169,21 @@ $handler->application(function(array $payload) {
   $payload['resource_usage'] = getrusage(); 
   return $payload;
 });
+```
+
+**Use PHProblemLogger exception logging tools even in caught exception**
+
+*Keep in mind: if you have your own exception handler defined before PHProblemLogger, this will kick off yours as well.*
+
+```php
+
+try {
+  somethingCausesException();
+}
+catch (\Exception $e) {
+  // some custom programming here
+  $handler->handleException($e);
+}
 ```
 
 ### Troubleshooting
