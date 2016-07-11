@@ -219,7 +219,7 @@ something like this to my application.  I then created it as an open source proj
 
 ### Requirements
 
- - PHP 5.4+
+ - PHP 5.5+
  
 ### Bugs and Feature Requests
 
