@@ -198,7 +198,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
             $this->fail('Exception not triggered.');
         }
         catch (\Exception $e) {
-            $this->assertInstanceOf('AaronSaray\PHProblemLogger\ErrorException', $e);
+            $this->assertInstanceOf('\ErrorException', $e);
             $this->assertEquals('my test error', $e->getMessage());
         }
     }
