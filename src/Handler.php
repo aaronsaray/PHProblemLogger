@@ -172,18 +172,19 @@ class Handler
     /**
      * Handles the error into an exception
      * 
-     * @param $errorNumber integer
+     * @param $errorNumberSeverity integer
      * @param $errorString string
      * @param $errorFile string
      * @param $errorLine integer
      * @param $errorContext array
-     * @throws ErrorException
+     * @throws \ErrorException
      */
-    public function handleError($errorNumber, $errorString, $errorFile, $errorLine, $errorContext)
+    public function handleError($errorNumberSeverity, $errorString, $errorFile, $errorLine, $errorContext)
     {
-        $errorException = new ErrorException($errorString, $errorNumber);
-        $errorException->setFile($errorFile);
-        $errorException->setLine($errorLine);
-        throw $errorException;
+        if (!(error_reporting() & $errorNumberSeverity)) {
+            // This error code is not included in error_reporting
+            return;
+        }
+        throw new \ErrorException($errorString, 0, $errorNumberSeverity, $errorFile, $errorLine);
     }
 }
