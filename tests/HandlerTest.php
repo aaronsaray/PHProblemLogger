@@ -202,4 +202,12 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals('my test error', $e->getMessage());
         }
     }
+
+    public function testNonTrackedErrorLevelNoException()
+    {
+        error_reporting(E_ERROR);
+        $handler = new Handler(new NullLogger());
+        trigger_error('my test error', E_USER_NOTICE);
+        $this->addToAssertionCount(1);
+    }
 }
