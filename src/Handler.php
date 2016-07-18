@@ -56,7 +56,9 @@ class Handler
      */
     public function session(callable $callable)
     {
-        $this->values['session'] = $callable($_SESSION);
+        if (isset($_SESSION)) {
+            $this->values['session'] = $callable($_SESSION);
+        }
         return $this;
     }
 
@@ -116,7 +118,9 @@ class Handler
      */
     public function server(callable $callable)
     {
-        $this->values['server'] = $callable($_SERVER);
+        if (isset($_SERVER)) {
+            $this->values['server'] = $callable($_SERVER);
+        }
         return $this;
     }
 
